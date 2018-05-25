@@ -40,10 +40,11 @@ def start_jvm():
     classloader = java.lang.Thread.currentThread().getContextClassLoader()
 
 
-def open_workbook(filename, password=None):
+def open_workbook(filename, password=None, read_only=False):
     try:
         start_jvm()
-        return jpype.JPackage('org').apache.poi.ss.usermodel.WorkbookFactory.create(java.io.File(filename), password)
+        return jpype.JPackage('org').apache.poi.ss.usermodel.WorkbookFactory.create(
+            java.io.File(filename), password, read_only)
     except jpype.JavaException as e:
         print(e.message())
         print(e.stacktrace())
