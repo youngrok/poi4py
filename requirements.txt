@@ -1,1 +1,1 @@
-JPype1-py3
+JPype1

@@ -40,7 +40,7 @@ def start_jvm():
 def add_classpaths(paths):
     URL = JPackage('java.net').URL
     sysloader = JPackage('java.lang').ClassLoader.getSystemClassLoader()
-    method = [m for m in (getDeclaredMethods(JPackage('java.net').URLClassLoader)) if m.name == 'addURL'][0]
+    method = [m for m in (getDeclaredMethods(JPackage('java.net').URLClassLoader)) if m.getName() == 'addURL'][0]
     method.setAccessible(True)
     for path in paths:
         method.invoke(sysloader, [URL(f"file://{path}")])
