@@ -1,18 +1,27 @@
 import os
+import subprocess
 
 import jpype
 import logging
+
+import sys
 from jpype import java, JPackage
 
 
-def start_jvm():
+def start_jvm(jvm_path=None):
+    if not jvm_path:
+        if sys.platform == 'darwin':
+            os.environ['JAVA_HOME'] = subprocess.check_output(['/usr/libexec/java_home']).strip().decode('utf8')
+
+        jvm_path = jpype.getDefaultJVMPath()
 
     if not jpype.isJVMStarted():
         jpype.addClassPath(f'{os.path.dirname(__file__)}/java/*')
-        jpype.startJVM(jpype.get_default_jvm_path(),
+        jpype.startJVM(jvm_path,
                        '-Dfile.encoding=UTF8',
                        '-ea',
-                       '-Xmx1024m')
+                       '-Xmx1024m',
+                       convertStrings=False)
 
     if not jpype.isThreadAttachedToJVM():
         jpype.attachThreadToJVM()
